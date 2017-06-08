@@ -1,0 +1,119 @@
+﻿
+@{
+    ViewBag.Title = "Order";
+}
+<style>
+    .validate.ng-invalid.ng-dirty{
+        border:1px solid red;
+    }
+</style>
+<h2>Orders</h2>
+<div ng-controller="Order">
+    <div class="container">
+        <button type="button" ng-click="AddClick()" class="btn btn-info btn-lg" data-toggle="modal" data-target="#Order">Add Order</button>
+    </div>
+    <br />
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-sm-2">Order<span class="caret"></span></th>
+                    <th class="col-sm-2">Date<span class="caret"></span></th>
+                    <th class="col-sm-2">Customer Name<span class="caret"></span></th>
+                    <th class="col-sm-2">Product<span class="caret"></span></th>
+                    <th class="col-sm-2">Price<span class="caret"></span></th>
+                    <th class="col-sm-2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+
+                <tr ng-repeat="o in Orders | orderBy : 'OrderDate': true">
+                    <td class="col-sm-2">{{o.Id}}</td>
+                    <td class="col-sm-2">{{o.OrderDate | mydate | date: 'yyyy-MM-dd HH:mm'}}</td>
+                    <td class="col-sm-2">{{o.peo.Name}}</td>
+                    <td class="col-sm-2">{{o.pro.ProductName}}</td>
+                    <td class="col-sm-2">${{o.pro.Price}}</td>
+                    <td>
+                        <button type="button" ng-click="getOrder(o)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#Order">Edit</button>
+                        <button type="button" ng-click="DeleteOrder(o)" class="btn btn-info btn-sm" data-toggle="modal" data-target="#delete">Delete</button>
+                    </td>
+                    
+                </tr>
+
+            </tbody>
+        </table>
+        
+    </div>
+
+    <div class="modal fade" id="Order" role="dialog">
+        <div class="modal-dialog">
+            <form id="addcustomer" name="form">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">{{Action}} Order</h4>
+                    </div>
+
+                    <div class="modal-body">
+                        <div ng-show="flag">
+                            <div class="form-group row">
+                                <label for="orderid" class="col-sm-2 col-form-label">Order Id</label>
+                                <div class="col-sm-10">
+                                    <input ng-readonly="true" type="text" ng-model="newOrder.Id" class="form-control" placeholder="OrderId">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="orderdate">Order Date</label>
+                                <div class="col-sm-10">
+                                    <textarea ng-readonly="true" class="form-control" ng-model="newOrder.date" placeholder="Order Date"></textarea>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 col-form-label" for="custname">Customer Name*</label>
+                            <div class="col-sm-10">
+                                <select class="form-control validate" name="customer" ng-model="newOrder.CustomerId" ng-options="s.Id as s.Name for s in Namelist" required>
+                                    <option value="">Choose Customer Name</option>
+
+                                </select>
+                               
+
+                                   
+                            </div>
+
+                        </div>
+                        <div>
+                            <div class="form-group row">
+                                <label class="col-sm-2 col-form-label" for="productname">Product Name*</label>
+                                <div class="col-sm-10">
+                                    <select class="form-control" ng-model="newOrder.productId" ng-change="productoption(newOrder.productId)" ng-options="s.Id as s.ProductName for s in Productlist" required>
+                                        <option value="">Choose Product Name</option>
+                                        
+                                    </select>
+                                </div>
+
+                            </div>
+                            <div class="form-group row">
+                                <label for="price" class="col-sm-2 col-form-label">Price</label>
+                                <div class="col-sm-10">
+                                    <input ng-readonly="true" type="text" ng-model="newOrder.Price" class="form-control" id="price" name="price" placeholder="Price">
+                                </div>
+                            </div>
+                           
+                        </div>
+                    <div class="modal-footer">
+                        <button type="submit" ng-disabled="form.$invalid" ng-click="Addorder()" class="btn btn-primary" id="addcustomer" data-dismiss="modal">{{Action}}</button>
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+
+                    </div>
+                </div>
+                    </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+    
